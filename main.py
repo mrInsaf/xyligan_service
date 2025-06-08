@@ -46,10 +46,11 @@ def load_models_from_disk():
             }
     print(f"Загружено моделей: {len(models_db)}")
 
+
 # === Настройка CORS ===
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Замените на ваш фронтенд
+    allow_origins=["*"],  # Замените на ваш фронтенд
     allow_methods=["*"],
     allow_headers=["*"],
 )
