@@ -19,6 +19,10 @@ CHROMEDRIVER_PATH = "chrome-win64\\chrome.exe"
 # === Опции для ChromeDriver ===
 chrome_opts = Options()
 chrome_opts.add_argument("--disable-gpu")
+chrome_opts.add_argument("--headless=new")
+chrome_opts.add_argument("--disable-dev-shm-usage")  # Для стабильности в headless
+chrome_opts.add_argument("--no-sandbox")             # Обход ограничений в некоторых окружениях
+chrome_opts.add_argument("--disable-setuid-sandbox")
 chrome_opts.add_experimental_option("prefs", {
     "download.default_directory": os.path.join(os.getcwd(), "downloads"),
     "download.prompt_for_download": False,
@@ -36,7 +40,7 @@ def run_script(prompt):
     os.makedirs(download_dir, exist_ok=True)
 
     driver = webdriver.Chrome(options=chrome_opts)
-    driver.maximize_window()
+    driver.set_window_size(1920, 1080)
     wait = WebDriverWait(driver, 120)
 
     try:
@@ -44,6 +48,7 @@ def run_script(prompt):
         driver.get(SITE_URL)
         
         # 2) Авторизация
+        print("Авторизовываюсь")
         wait.until(EC.presence_of_element_located((By.ID, "login-email"))).send_keys(USERNAME)
         driver.find_element(By.ID, "login-password").send_keys(PASSWORD)
         driver.find_element(
@@ -51,24 +56,34 @@ def run_script(prompt):
             "form[action='/login'] button[type='submit'].btn-primary.btn-block"
         ).click()
         wait.until(EC.invisibility_of_element_located((By.ID, "login-email")))
+        print("Авторизовывался")
 
         # 3) Ввод промпта
+        print("Ввожу промт")
         textarea = wait.until(EC.presence_of_element_located((By.ID, "prompt")))
         textarea.clear()
         textarea.send_keys(prompt)
+        print("ввел")
 
+        print("Отправляю")
         # Отправляем
         driver.find_element(By.ID, "text_submit_btn").click()
+        print("Отправил")
 
         # 4) Выбор формата GLB
+        print("Выбираю формат")
         format_select = wait.until(EC.element_to_be_clickable((By.ID, "file_format")))
         Select(format_select).select_by_value("glb")
+        print("Выбрал")
 
         # 5) Ожидаем кнопку «Скачать» и нажимаем
+        print("Ожидаю кнопки скачать")
         download_btn = wait.until(EC.element_to_be_clickable((By.ID, "download-btn")))
         download_btn.click()
+        print("Скачиваю")
 
         # 6) Ожидание файла
+        print("Ожидаю файла")
         expected_filename = generate_filename(prompt)
         file_path = os.path.join(download_dir, expected_filename)
         

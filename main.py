@@ -17,12 +17,6 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup_event():
-    from pyngrok import ngrok
-    ngrok.set_auth_token("2qfhIMagPaFOym2rGXmFRk0Ksw1_7appMjxRyWHSFrEj9R4jq")
-
-    public_url = ngrok.connect(8000)
-    print(f"Сервис доступен по URL: {public_url}")
-
     load_models_from_disk()
 
 
