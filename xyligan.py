@@ -12,8 +12,8 @@ import re
 
 # === Настройки пользователя ===
 SITE_URL = "https://aiprintgen.ru/" 
-USERNAME = "vosaji4645@3dboxer.com"
-PASSWORD = "lt=B93z>Re96"
+USERNAME = "akmmg5athb@qzueos.com"
+PASSWORD = "=e'\93:LLj54"
 CHROMEDRIVER_PATH = "chrome-win64\\chrome.exe"
 
 # === Опции для ChromeDriver ===
@@ -100,6 +100,7 @@ def run_script(prompt):
         else:
             print("Тайм-аут: файл не найден.")
     finally:
+        print("quitting")
         driver.quit()
 
 if __name__ == "__main__":
